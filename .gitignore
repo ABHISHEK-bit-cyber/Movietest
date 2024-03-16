@@ -1,7 +1,8 @@
 # OSX
 #
 .DS_Store
-
+app-debug.apk
+app-release.apk
 # Xcode
 #
 build/
