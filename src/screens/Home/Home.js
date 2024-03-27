@@ -81,7 +81,6 @@ const Home = () => {
             source={
               item.urlToImage ? { uri: item.urlToImage } : PlaceholderImage
             }
-            PlaceholderImage={PlaceholderImage}
             loadingIndicatorSource={require("../../assets/images/spinner.gif")}
             style={styles.image}
           />
@@ -126,13 +125,6 @@ const Home = () => {
         />
         <IconButton iconName={"filter"} onPress={() => {}} />
       </View>
-
-      <Bottomsheet
-        sheetRef={sheetRef}
-        open={open}
-        onClose={handleCloseSheet}
-        onApply={handleApply}
-      />
 
       <FlatList
         data={articles}
