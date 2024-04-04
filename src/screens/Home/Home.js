@@ -26,7 +26,7 @@ const Home = () => {
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("business");
   const [country, setCountry] = useState("in");
-  const categories = ["business", "politics", "sports"];
+  const categories = ["business", "politics", "sports","entertainment", "general", "health","science","technology"];
 
   useEffect(() => {
     getCachedData();
@@ -115,10 +115,12 @@ const Home = () => {
 
   const handleApply = async (params) => {
     try {
-      const newsParams = { from: params.dateFrom, to: params.dateTo };
+      setCountry(params.country);
+      const newsParams = { from: params.dateFrom, to: params.dateTo , category: category, country: params.country};
       if(search) {
         newsParams.query = search;
       }
+      setOpen(false);
       getNews(newsParams);
     } catch (error) {
       console.error("Error fetching news:", error);
@@ -152,7 +154,7 @@ const Home = () => {
       </View>
       
 
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row",flexWrap: 'wrap' }}>
         {categories.map((item, index) => {
           return (
             <TouchableOpacity
@@ -174,7 +176,7 @@ const Home = () => {
         })}
       </View>
 
-      <BottomSheet sheetRef={sheetRef} open = {open} onClose={ handleCloseSheet } onApply={ handleApply }/>
+      <BottomSheet sheetRef={sheetRef} open = {open} onClose={ handleCloseSheet } onApply={ handleApply} country={country}/>
 
       <FlatList
         data={articles}

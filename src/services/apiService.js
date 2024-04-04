@@ -20,6 +20,7 @@ const constructUrl = (country, category, query, from, to, sortBy) => {
 
 const fetchNews = async options => {
   try {
+    console.log(options);
     const url = constructUrl(options.country, options.category, options.query, options.from, options.to, options.sortBy);
    
     const response = await apiService.get(url);

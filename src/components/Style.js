@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 10,
   },
+  pickerContainer: {
+    flexGrow: 1,
+},
   fdHorizontal: {
     flexDirection: 'row',
   },
