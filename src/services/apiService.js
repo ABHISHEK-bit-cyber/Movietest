@@ -8,8 +8,10 @@ const apiService = axios.create({
   timeout: 10000,
 });
 
-const constructUrl = (query, from, to, sortBy) => {
-  let url = `/everything?q=${query}&apiKey=${API_KEY}`;
+const constructUrl = (country, category, query, from, to, sortBy) => {
+  let url = '';
+  if(query) url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`;
+  else url = `https://newsapi.org/v2/top-headlines?country=${country}&category=${category}&apiKey=${API_KEY}`;
   if (from) url += `&from=${from}`;
   if (to) url += `&to=${to}`;
   if (sortBy) url += `&sortBy=${sortBy}`;
@@ -18,7 +20,8 @@ const constructUrl = (query, from, to, sortBy) => {
 
 const fetchNews = async options => {
   try {
-    const url = constructUrl(options);
+    const url = constructUrl(options.country, options.category, options.query, options.from, options.to, options.sortBy);
+   
     const response = await apiService.get(url);
     return response.data.articles;
   } catch (error) {

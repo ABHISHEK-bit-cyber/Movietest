@@ -1,35 +1,48 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   searchContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     elevation: 3,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     margin: 10,
-    padding: 5
+    padding: 5,
+  },
+  titleText: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  descText: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    color: "grey",
+    fontSize: 14,
   },
   searchInput: {
-    flex: 1
+    flex: 1,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   newsItemContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     elevation: 3,
     marginHorizontal: 10,
     marginVertical: 5,
   },
   image: {
-    resizeMode: 'cover',
-    height:200,    
-  }
+    resizeMode: "cover",
+    height: 200,
+  },
 });

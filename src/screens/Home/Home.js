@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { styles } from "./Style";
@@ -12,7 +13,7 @@ import { IconButton } from "../../components/buttons/buttons";
 import { fetchNews } from "../../services/apiService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import Bottomsheet from '../../components/bottomSheet';
+import BottomSheet from "../../components/bottomSheet";
 
 const Home = () => {
   const [search, setSearch] = useState();
@@ -23,20 +24,32 @@ const Home = () => {
   const [isOnline, setIsOnline] = useState(false);
   const sheetRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState("business");
+  const [country, setCountry] = useState("in");
+  const categories = ["business", "politics", "sports"];
 
   useEffect(() => {
     getCachedData();
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(state.isConnected);
     });
+    console.log(sheetRef);
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
     if (isOnline) {
-      getNews("today");
+      getNews({ country: country, category: category });
     }
   }, [isOnline]);
+
+  useEffect(() => {
+    if (open) {
+      sheetRef.current?.open();
+    } else {
+      sheetRef.current?.close();
+    }
+  }, [open]);
 
   const getNews = async (query) => {
     setLoading(true);
@@ -58,7 +71,7 @@ const Home = () => {
         setLoading(false);
         setArticles(JSON.parse(cachedData));
       } else {
-        getNews("today");
+        getNews({ country: country, category: category });
       }
     } catch (error) {
       console.error("Error retrieving cached data:", error);
@@ -84,6 +97,8 @@ const Home = () => {
             loadingIndicatorSource={require("../../assets/images/spinner.gif")}
             style={styles.image}
           />
+          <Text style={styles.titleText}>{item.title}</Text>
+          <Text style={styles.descText}>{item.description}</Text>
         </View>
       </View>
     );
@@ -105,6 +120,9 @@ const Home = () => {
     }
   };
 
+
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -119,12 +137,44 @@ const Home = () => {
           color={isSearchEnabled ? "#000" : "#c2c2c2"}
           onPress={() => {
             if (isSearchEnabled) {
-              getNews(search);
+              setCategory("");
+              getNews({ query: search });
             }
           }}
         />
-        <IconButton iconName={"filter"} onPress={() => {}} />
+        <IconButton iconName={"filter"} onPress={() => setOpen(true)} />
       </View>
+
+      <Text>Categories</Text>
+
+      <View style={{ flexDirection: "row" }}>
+        {categories.map((item, index) => {
+          return (
+            <TouchableOpacity
+              style={{
+                backgroundColor: item == category ? "#1a73e8" : "white",
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+                borderRadius: 10,
+                marginHorizontal: 8,
+                marginVertical: 5,
+                elevation: 3,
+              }}
+              onPress={() => {
+                setCategory(item);
+                setSearch("");
+                getNews({ country: country, category: item });
+              }}
+            >
+              <Text style={{ color: item == category ? "white" : "black" }}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      <BottomSheet sheetRef={sheetRef} open = {open} onClose={ handleCloseSheet } onApply={ handleApply }/>
 
       <FlatList
         data={articles}
