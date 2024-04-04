@@ -113,15 +113,17 @@ const Home = () => {
     setOpen(false);
   };
 
-  const handleApply = async (params: any) => {
+  const handleApply = async (params) => {
     try {
+      const newsParams = { from: params.dateFrom, to: params.dateTo };
+      if(search) {
+        newsParams.query = search;
+      }
+      getNews(newsParams);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      console.error("Error fetching news:", error);
     }
   };
-
-
-  
 
   return (
     <View style={styles.container}>
@@ -145,7 +147,10 @@ const Home = () => {
         <IconButton iconName={"filter"} onPress={() => setOpen(true)} />
       </View>
 
-      <Text>Categories</Text>
+      <View style={styles.title}>
+        <Text style={styles.categoryTxt}>Categories</Text>
+      </View>
+      
 
       <View style={{ flexDirection: "row" }}>
         {categories.map((item, index) => {
@@ -153,12 +158,7 @@ const Home = () => {
             <TouchableOpacity
               style={{
                 backgroundColor: item == category ? "#1a73e8" : "white",
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 10,
-                marginHorizontal: 8,
-                marginVertical: 5,
-                elevation: 3,
+                ...styles.categoryButton
               }}
               onPress={() => {
                 setCategory(item);
